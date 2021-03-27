@@ -10,8 +10,8 @@ import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.ParentRunner;
 import org.junit.runners.model.InitializationError;
 
-import com.hi.techpoints.cucumber.exception.OneviewException;
-import com.hi.techpoints.cucumber.listener.OneviewListener;
+import com.hi.techpoints.cucumber.exception.CucumberException;
+import com.hi.techpoints.cucumber.listener.CucumberListener;
 import com.hi.techpoints.cucumber.util.Storage;
 import com.hi.techpoints.cucumber.util.TestRepository;
 
@@ -34,13 +34,13 @@ import lombok.extern.slf4j.Slf4j;
  * 
  */
 @Slf4j
-public class OneviewCucumber extends ParentRunner<FeatureRunner>{
+public class CreateCucumberRuntime extends ParentRunner<FeatureRunner>{
 
 	private  JUnitReporter jUnitReporter;
     private final List<FeatureRunner> children = new ArrayList<FeatureRunner>();
     private final Runtime runtime;
     
-    public OneviewCucumber(Class<?> clazz) throws InitializationError, IOException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, OneviewException {
+    public CreateCucumberRuntime(Class<?> clazz) throws InitializationError, IOException, NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException, CucumberException {
         super(clazz);
         ClassLoader classLoader = clazz.getClassLoader();
         Assertions.assertNoCucumberAnnotatedMethods(clazz);
@@ -81,7 +81,7 @@ public class OneviewCucumber extends ParentRunner<FeatureRunner>{
     protected void runChild(FeatureRunner child, RunNotifier notifier) {
 	    try {
 			Storage.setupFeatureParam(child);
-		} catch (OneviewException e) {
+		} catch (CucumberException e) {
 			log.error("Unable to set respective future file input value on storage");
 			e.printStackTrace();
 		}
@@ -90,7 +90,7 @@ public class OneviewCucumber extends ParentRunner<FeatureRunner>{
 
     @Override
     public void run(RunNotifier notifier) {
-    	notifier.addListener(new OneviewListener());
+    	notifier.addListener(new CucumberListener());
     	super.run(notifier);
         jUnitReporter.done();
         jUnitReporter.close();

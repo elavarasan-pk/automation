@@ -15,7 +15,7 @@ import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.util.CellRangeAddress;
 
-import com.hi.techpoints.cucumber.exception.OneviewException;
+import com.hi.techpoints.cucumber.exception.CucumberException;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -49,15 +49,15 @@ public class UpdateTestResult {
 	/** Updating step definition status to result.xls
 	 * 
 	 * @param results
-	 * @throws OneviewException 
+	 * @throws CucumberException 
 	 */
-	public static void updateStatusToExcel(Map<Integer,List<Status>> results) throws OneviewException {
+	public static void updateStatusToExcel(Map<Integer,List<Status>> results) throws CucumberException {
 		try {
 			
 			HSSFWorkbook workbook = new HSSFWorkbook(); 
 	        HSSFSheet sheet = workbook.createSheet("Result");
 	        
-	        CellStyle style = createStyle(workbook,HSSFColor.BLUE.index);
+	        CellStyle style = createStyle(workbook,HSSFColor.YELLOW.index);
 			Row row = sheet.createRow(0);
          	
          	Cell cell = row.createCell(SCENARIO_COLUMN_INDEX);
@@ -122,10 +122,18 @@ public class UpdateTestResult {
 	                }
 	                
 	                inCell = row1.createCell(START_DATE_COLUMN_INDEX);
-	                inCell.setCellValue(dateFormat.format(status.getStartDate()));
+	                if(status.getStartDate() != null) {
+	                  inCell.setCellValue(dateFormat.format(status.getStartDate()));
+	                } else {
+	                   inCell.setCellValue("");
+	                }
 	                
 	                inCell = row1.createCell(END_DATE_COLUMN_INDEX);
-	                inCell.setCellValue(dateFormat.format(status.getEndDate()));
+	                if(status.getEndDate() != null) {
+	                  inCell.setCellValue(dateFormat.format(status.getEndDate()));
+	                } else {
+	                	 inCell.setCellValue("");
+	                }
 	                
 	                inCell = row1.createCell(COMMENT_COLUMN_INDEX);
 	                inCell.setCellValue(status.getComment());
@@ -164,7 +172,7 @@ public class UpdateTestResult {
 	        outputFile.close();
 		} catch (Exception e) {
 			log.error("Result.xsl not found on the location : [{}]",RESULT_DIR);
-			throw new OneviewException("Result.xsl not found on the location :["+RESULT_DIR+"]",e);
+			throw new CucumberException("Result.xsl not found on the location :["+RESULT_DIR+"]",e);
 		}
          
         

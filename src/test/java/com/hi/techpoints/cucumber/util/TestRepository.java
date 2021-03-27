@@ -13,7 +13,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 
-import com.hi.techpoints.cucumber.exception.OneviewException;
+import com.hi.techpoints.cucumber.exception.CucumberException;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -36,9 +36,9 @@ public class TestRepository {
 	/**Read  future files from Repository.xls
 	 * 
 	 * @return
-	 * @throws OneviewException 
+	 * @throws CucumberException 
 	 */
-	public static Map<String, List<String>> getModuleFeatures() throws OneviewException {
+	public static Map<String, List<String>> getModuleFeatures() throws CucumberException {
 
 		try (Workbook workbook = WorkbookFactory.create(new File(INPUT_REPOSITORY));) {
 
@@ -78,7 +78,7 @@ public class TestRepository {
            return testCases;
 		} catch (Exception e) {
 			log.error("Repository.xsl not found on the location : [{}]",INPUT_REPOSITORY);
-			throw new OneviewException("Repository.xsl not found on the location :["+INPUT_REPOSITORY+"]",e);
+			throw new CucumberException("Repository.xsl not found on the location :["+INPUT_REPOSITORY+"]",e);
 		}
 	}
 	
@@ -86,12 +86,15 @@ public class TestRepository {
 	 * 
 	 * @param sheetName
 	 * @return
-	 * @throws OneviewException 
+	 * @throws CucumberException 
 	 */
-	public static Map<String, Object> getFeatureFileValue(String sheetName) throws OneviewException {
+	public static Map<String, Object> getFeatureFileValue(String sheetName) throws CucumberException {
 
 		try (Workbook workbook = WorkbookFactory.create(new File(INPUT_REPOSITORY));) {
 			Sheet sheet = workbook.getSheet(sheetName);
+			if(sheet == null) {
+				return null;
+			}
 			int totalRows = sheet.getPhysicalNumberOfRows();
 
 			Map<String, Object> featureParamValue = new HashMap<>();
@@ -110,7 +113,7 @@ public class TestRepository {
            return featureParamValue;
 		} catch (Exception e) {
 			log.error("Repository.xsl not found on the location : [{}]",INPUT_REPOSITORY);
-			throw new OneviewException("Repository.xsl not found on the location :["+INPUT_REPOSITORY+"]",e);
+			throw new CucumberException("Repository.xsl not found on the location :["+INPUT_REPOSITORY+"]",e);
 		}
 	}
 	
@@ -119,7 +122,7 @@ public class TestRepository {
 	 * @return
 	 * @throws IOException
 	 */
-	public static  List<String> getAllFeatures() throws OneviewException {
+	public static  List<String> getAllFeatures() throws CucumberException {
 		 Map<String, List<String>> moduleFeatures = getModuleFeatures();
 		 List<String> features = new ArrayList<>();
 		 

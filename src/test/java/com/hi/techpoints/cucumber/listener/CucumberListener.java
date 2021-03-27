@@ -13,7 +13,7 @@ import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
 
-import com.hi.techpoints.cucumber.exception.OneviewException;
+import com.hi.techpoints.cucumber.exception.CucumberException;
 import com.hi.techpoints.cucumber.util.Status;
 import com.hi.techpoints.cucumber.util.Storage;
 import com.hi.techpoints.cucumber.util.UpdateTestResult;
@@ -27,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
  *and after execution of each step definition.
  */
 @Slf4j
-public class OneviewListener extends RunListener{
+public class CucumberListener extends RunListener{
 
 	private int count = 0;
 	private String excutionScenario = null;
@@ -90,7 +90,7 @@ public class OneviewListener extends RunListener{
     
     
     @Override
-    public void testFinished(Description description) throws OneviewException {
+    public void testFinished(Description description) throws CucumberException {
     	this.description = description.getDisplayName();
     	
     	if(this.description.equals(excutionScenario)) {
@@ -124,9 +124,9 @@ public class OneviewListener extends RunListener{
     /**Collecting status of each step definition.
      * 
      * @param description
-     * @throws OneviewException
+     * @throws CucumberException
      */
-    private void updateStatus(Description description) throws OneviewException {
+    private void updateStatus(Description description) throws CucumberException {
     	Status status = new Status();
  		status.setComment(errorMessage);
  		status.setStep(description.getMethodName());

@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.hi.techpoints.cucumber.exception.OneviewException;
+import com.hi.techpoints.cucumber.exception.CucumberException;
 
 import cucumber.runtime.junit.FeatureRunner;
 import cucumber.runtime.model.CucumberFeature;
@@ -53,9 +53,9 @@ public class Storage {
 	/** Set respective future file input value on storage. 
 	 * 
 	 * @param featureRunner
-	 * @throws OneviewException
+	 * @throws CucumberException
 	 */
-	public static void setupFeatureParam(FeatureRunner featureRunner) throws OneviewException {
+	public static void setupFeatureParam(FeatureRunner featureRunner) throws CucumberException {
 		
     	try {
 
@@ -65,12 +65,13 @@ public class Storage {
 			String path = cucumberFeature.getPath();
 			String sheetName = path.substring(path.lastIndexOf("/")+1);
 			featureStorage.clear();
-			
-		    featureStorage.putAll(TestRepository.getFeatureFileValue(sheetName));
-						
+			Map<String, Object> result = TestRepository.getFeatureFileValue(sheetName);
+			if(result != null) {
+		      featureStorage.putAll(result);
+			}
 		} catch (Exception e) {
-			log.error("'cucumberFeature' f not found on FeatureRunner class");
-			throw new OneviewException("'cucumberFeature' f not found on FeatureRunner class",e);
+			log.error("'cucumberFeature'  not found on FeatureRunner class");
+			throw new CucumberException("'cucumberFeature' f not found on FeatureRunner class",e);
 		}
 	}
 }

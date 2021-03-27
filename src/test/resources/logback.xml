@@ -21,7 +21,7 @@
         </encoder>
 	</appender>
 
-	<logger name="com.numerix.oneview.cucumber" level="debug" additivity="false">
+	<logger name="com.hi.techpoints.cucumber" level="debug" additivity="false">
 		<appender-ref ref="STDOUT" />
 		<appender-ref ref="file" />
 	</logger>
