@@ -1,5 +1,5 @@
 BDD-integration
 ==================
 
-	Integration testing Cucumber JVM with Maven application.	
+	Integration testing Cucumber bdd with Maven application.	
 
